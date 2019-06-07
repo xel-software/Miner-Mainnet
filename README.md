@@ -40,7 +40,8 @@ apt-get install -y cmake libcurl4-openssl-dev libudev-dev screen libtool pkg-con
 
 ##### macOS
 
-you must first install homebrew (if not already installed):
+你必须先安装自制软件（如果尚未安装）：
+
 
 ```
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
