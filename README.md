@@ -105,6 +105,6 @@ use `./xel_miner -h` to see a full list of options.
 ----
 ## 信任性
 
--该矿工的核心是基于cpuminer
--EPL / Work Package逻辑基于创立者Evil-Knievel的不懈努力  
--xel项目你可以在这里找到：https://github.com/xel-software
+ -该矿工的核心是基于cpuminer
+ -EPL / Work Package逻辑基于创立者Evil-Knievel的不懈努力  
+ -xel项目內容你可以在这里找到：https://github.com/xel-software
