@@ -56,21 +56,18 @@
 		
 	        例如：   d[6] = u[5] / i[5];
 		
-			u[5] / i[5] evaluates to u[5] / (uint)(i[5]) 
+			u[5] / i[5] 分析为 u[5] / (uint)(i[5]) 
 			
-			no cast is needed for (u[5] / (uint)(i[5])) as the d[6] storage
-			can handle the result of the operation.
-
-	If a value assigned to an array variable has a different data type, the
-	value will be cast to the same type as the array variable.
+			但没有必要写成(u[5] / (uint)(i[5])) 因为 d[6] 的存储类型
+			已经决定了操作的结果。	
+        如果一个数值分配给一个数组变量，当它们时两个不同的数据类型时，该数值会被转换为
+	与数组变量同样的数据类型。
 	
-	Variables that have a calculated index value can accept an Unsigned Int /
-	Long as thier index; however, a boundary check will need to be performed
-	which may impact performance.  Therefore, you may want to minimize the use
-	of these.  For example:
+        计算指数的变量可以接受无符号整数型/只要他们的指数；但是，需要执行变量的边界检查，这将会影响到性能。
+	因此，请尽可能少的使用它们。例如：
 	
-		u[0] = u[u[3]]; evaluates to: u[0] = ((u[3]<MAX_ALLOWED) ? u[u[3]] : 0)
-		u[u[3]] = u[0]; evaluates to: if (u[3]<MAX_ALLOWED) { u[u[3]] = u[0]; }
+		u[0] = u[u[3]]; 分析为: u[0] = ((u[3]<MAX_ALLOWED) ? u[u[3]] : 0)
+		u[u[3]] = u[0]; 分析为: if (u[3]<MAX_ALLOWED) { u[u[3]] = u[0]; }
 
 		
 VM初始化变量
