@@ -23,13 +23,11 @@
 		
 全局变量
 ----------------
+         
+        ePL虚拟机所有存储都需要使用全局变量，且都是标准的32位和64位数据类型（int32_t, uint32_t, int64_t, uint64_t,
+	float, double）。不支持本地存储。
 
-	The ElasticPL VM performs all storage using Global Variables based on the
-	standard 32bit and 64bit data types (int32_t, uint32_t, int64_t, uint64_t,
-	float, double). Local storage is not supported.
-	
-	Named variables are not allowed, instead data is stored in an array which
-	represents the data type.  The arrays are declared as follows:
+        不允许使用自定义变量，数据的存储需要使用一个符合要求数据类型的数组内。数据的声明如下：
 	
 		array_int    XXXX
 		array_uint   XXXX
@@ -38,14 +36,12 @@
 		array_float  XXXX
 		array_double XXXX
 	
-		Note 1: XXXX represents the number of elements in the array.
-		Note 2: Only 1 instance of each data type can be declared.
-		Note 3: The maximim combined storage size of all Global Variables can
-		        not exceed (TBD - need to determine max memory)
-
-	All global arrays need to be declared as the first lines in the program,
-	prior to any functions.
-
+		Note 1: XXXX 表示数组中的元素数.
+		Note 2: 数组内元素使用统一的数据类型.
+		Note 3: 所有全局变量的最大组合存储大小不超过（待定 - 需要确定最大的内存空间）
+        
+        所有的全局变量的声明都应该在程序的第一行，所有函数之前。
+	
 	Array variables are accessed using the prefix i, u, l, ul, f, or d followed
 	by square brackets that include the zero based array index.  For example:
 	
