@@ -10,15 +10,15 @@
 	任务设计人员需要定义特定的验证逻辑，这样在最大执行时间（WCET）内，
 	可以确保Miner提交的赏金和POW结果可以被分布式网络内的所有节点所验证。
 	
-程序设计
+程序设计规范
 --------------
 
-	An ElasticPL program consists of:
-		- 1 or more Global Variable arrays
-		- Storage declarations (Optional)
-		- "main" Function
-		- "verify" Function
-		- User-Defined Functions (Optional)
+	一个ePL程序应包含:
+		 - 一个或者多个全局数组变量
+		 - 存储声明（可选） 
+	         - "main"函数
+	         - "verify"函数
+	         -用户自定义函数（可选）
 
 		
 全局变量
