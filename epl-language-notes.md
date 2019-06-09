@@ -40,24 +40,21 @@
 		Note 2: 数组内元素使用统一的数据类型.
 		Note 3: 所有全局变量的最大组合存储大小不超过（待定 - 需要确定最大的内存空间）
         
-        所有的全局变量的声明都应该在程序的第一行，所有函数之前。
+        全局变量的声明都应该在程序的第一行，所有函数之前。
 	
-	Array variables are accessed using the prefix i, u, l, ul, f, or d followed
-	by square brackets that include the zero based array index.  For example:
+        数组的前缀可以使用i, u, l, ul, f, 或者 d，方括号内为基于0的数组索引。例如：
 	
 		i[0] = 100;
 		u[5] = u[3] * 10;
 		d[6] = u[5] / i[5];
-	
-	Although it is discouraged to mix data types, there are times when this may
-	be necessary.  Because ElasticPL does not have an explicit 'cast' operation,
-	when an array variable is combined with a variable or constant of a different
-	data type, the values being combined will be cast based on the following
-	precedence:
-	
+
+        虽然不鼓励使用混合的数据类型，但有时候还是会不可避免地会使用到。
+        由于ePL没有强制转换的操作，当遇到数组变量与常规变量或常量组合，且都是不同的数据类型时，
+        需遵循以下转换优先级：
+
 		int32_t -> uint32_t -> int64_t -> uint64_t -> float -> double
 		
-		For example, using d[6] = u[5] / i[5];
+	        例如：   d[6] = u[5] / i[5];
 		
 			u[5] / i[5] evaluates to u[5] / (uint)(i[5]) 
 			
