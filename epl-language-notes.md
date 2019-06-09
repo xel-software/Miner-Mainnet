@@ -16,7 +16,7 @@
 	submitted by miners can be validated by all nodes on a distributed network.
 
 	
-PROGRAM LAYOUT
+程序设计
 --------------
 
 	An ElasticPL program consists of:
@@ -27,7 +27,7 @@ PROGRAM LAYOUT
 		- User-Defined Functions (Optional)
 
 		
-GLOBAL VARIABLES
+全局变量
 ----------------
 
 	The ElasticPL VM performs all storage using Global Variables based on the
@@ -86,7 +86,7 @@ GLOBAL VARIABLES
 		u[u[3]] = u[0]; evaluates to: if (u[3]<MAX_ALLOWED) { u[u[3]] = u[0]; }
 
 		
-VM INITIALIZED VARIABLES
+VM初始化变量
 ------------------------
 
 	The ElasticPL VM inializes 12 Unsigned Int variables each run/iteration.
@@ -105,7 +105,7 @@ VM INITIALIZED VARIABLES
 	'init' function only on run/iteration 0)
 	
 
-SUBMIT DATA FOR VALIDATION
+提交数据进行验证
 -----------------------------
 
 	Many smaller, less complex algorithms can be verified by running the full
@@ -137,7 +137,7 @@ SUBMIT DATA FOR VALIDATION
 	u[] values prior to executing the verify logic.
 	
 
-ITERATION DATA STORAGE
+迭代数据储存
 ----------------------
 
 	ElasticPL has the ability to store a limited amount of data to be used to
@@ -166,7 +166,7 @@ ITERATION DATA STORAGE
 	If the ElasticPL job does not use iterations, the s[] array should not be used.
 	
 
-FUNCTIONS
+函数
 ---------
 
 	All ElasticPL statements (except declaring global variable arrays and storage)
@@ -206,7 +206,7 @@ FUNCTIONS
 	All ElasticPL programs must have a "verify" function.
 
 
-"main" Function
+"main"函数
 ---------------
 
 	All programs must have a "main" function.
@@ -240,7 +240,7 @@ FUNCTIONS
 		Note: The "main" function can only use Option 1 or Option 2, not both.		
 
 		
-"verify" Function
+"verify" 函数
 -----------------
 
 	All programs must have a "verify" function.
@@ -304,7 +304,7 @@ FUNCTIONS
 		function to validate that the submitted data is in fact a valid solution.
 	
 	
-ELASTICPL STATEMENTS
+ePL声明
 --------------------
 	
 	Similar to C, all ElasticPL statements are terminated by a ';'
@@ -345,7 +345,7 @@ ELASTICPL STATEMENTS
 		Note:  'repeat' statements can only be nested up to 32 Levels.
 			
 	
-ELASTICPL OPERATORS
+ePL运算符
 -------------------
 
 	The following operators are supported by ElasticPL.  These operators behave
@@ -394,7 +394,7 @@ ELASTICPL OPERATORS
 	    13        |=      Bit OR and Assignment  (Right to Left)
 
 		
-ELASTICPL BUILT_IN FUNCTIONS
+ePL内置函数
 ----------------------------
 
 	ElasticPL includes several functions from the C math library.  These built-in
