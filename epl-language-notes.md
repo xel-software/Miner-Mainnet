@@ -72,9 +72,9 @@
 		
 VM初始化变量
 ------------------------
-
-	The ElasticPL VM inializes 12 Unsigned Int variables each run/iteration.
-	These variables are stored in m[0] through m[11] and defined as follows:
+        
+        ePL虚拟机在每次的运行/迭代都会更新12个无符号整数型变量。
+        这些变量存储在m[0]到m[11]中，定义如下：
 	
 		m[0]	Random 32 bit Unsigned Int
 		.
@@ -83,10 +83,9 @@ VM初始化变量
 		m[9]	Random 32 bit Unsigned Int
 		m[10]	Run Number
 		m[11]	Iteration Number
-
-	The variables allow the job authors to randomize their algorithm inputs
-	as well as trigger functions to run at specific intervals (i.e. run an 
-	'init' function only on run/iteration 0)
+		
+        这些变量允许任务设计人员随机化它们的算法输入以及触发函数的特定时间间隔。
+	（i.e.当运行/迭代为0的时候运行init函数）
 	
 
 提交数据进行验证
