@@ -245,26 +245,23 @@ VM初始化变量
 
 		 任务设计人员必须要确保"verify"函数中有足够且正确的校验逻辑，来验证提交来的解决方案是有效的。
 	
-ePL声明
+ePL概述
 --------------------
+      
+        如同C语言，所有的ePL声明都需要在结尾加一个';'
 	
-	Similar to C, all ElasticPL statements are terminated by a ';'
-	
-	IF / ELSE Statements
+	IF / ELSE 语句
 	--------------------
 	
-		ElasticPL supports IF / ELSE statements.  Their behavior is identical
-		to the C programming language.
-
+	        ePL支持IF / ELSE语句，功能和用法与C语言一样。
 		
-	REPEAT Statement
+	REPEAT 语句
 	----------------
+	        
+	        ePL不支持DO，WHILE,还有FOR循环语句。
+		作为替代，ePL使用的是'repeat'语句，来确保所有的循环能运行到结束，但又不能无限期的循环下去。
 	
-		ElasticPL does not allow DO, WHILE, or FOR loops.  Instead, ElasticPL
-		uses a 'repeat' statement which ensures all loops terminate and cannot
-		run indefinitely.
-		
-		The format of the 'repeat' statment is as follows:
+	        'repeat'语句的格式如下：
 		
 			repeat( <variable1>, <variable2>, <constant> ) { }
 
@@ -276,14 +273,14 @@ ePL声明
 				.			
 			}
 		
-		variable1 = Unsigned Int variable to store the loop counter
-		            (Array variable must have a constant index)
-		variable2 = Unsigned Int variable or constant to store number of iterations to do
-		            (Array variable can be a variable or constant index)
-		constant  = Unsigned Int constant for Max number of iterations allowed
-		            (constant is used to calculate the WCET of the Repeat)
+		variable1 = 无符号整数型变量用于存储循环次数
+		            (数组变量必须具有常量索引)
+		variable2 = 无符号整数型变量用于存储需要执行的迭代次数
+		            (数组变量必须具有常量索引)
+		constant  = 无符号整数型变量用于存储允许迭代次数的最大值
+		            (常量用于计算'repeat'的WCET次数)
 		
-		Note:  'repeat' statements can only be nested up to 32 Levels.
+	        注：'repeat'语句最多只能嵌套32层
 			
 	
 ePL运算符
