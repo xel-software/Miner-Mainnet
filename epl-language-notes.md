@@ -199,15 +199,14 @@ VM初始化变量
 		
 "verify" 函数
 -----------------
-
-	All programs must have a "verify" function.
-
-	This function should include the the minimal amount of logic required to
-	ensure that the submitted solution meets the Bounty and/or POW requirements.
+   
+        所有的程序必须有一个"verify"函数。
 	
-	The logic included in the "verify" function must be less than WCET = TBD
+        校验函数应该包含小体积精简的校验逻辑要求，来确保提交来的解决方案符合悬赏 与/或 POW的要求。
+	
+        这个校验函数中的逻辑设计，运行时间不能超过WCET（待定）
 
-	VERIFY_BTY Statement
+	VERIFY_BTY 声明
 	----------------
 
 		All ElasticPL programs must have a 'verify_bty' statement that includes
@@ -232,7 +231,7 @@ VM初始化变量
 		function to validate that the submitted data is in fact a valid solution.
 		
 		
-	VERIFY_POW Statement
+	VERIFY_POW 声明
 	----------------
 
 		All ElasticPL programs must have a 'verify_pow' statement that checks
