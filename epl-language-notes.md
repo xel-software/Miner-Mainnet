@@ -91,31 +91,24 @@ VM初始化变量
 提交数据进行验证
 -----------------------------
  
-        许多小型的、简单的算法可以使用全随机的m[]数组中的变量进行全逻辑校验。
-	但是更加复杂的算法必须提供简化的逻辑来执行验证。
-        这种简化的逻辑通常需要在运行验证之前预填充一些变量数组。
-	这些数组又会由miner发送给XEL节点来进行验证。
+        许多小型的、简单的算法可以使用全随机的m[]数组中的变量进行全逻辑校验。但是更加复杂的算法必须提供简化的逻辑来执行验证。
+        这种简化的逻辑通常需要在运行验证之前预填充一些变量数组。这些数组又会由miner发送给XEL节点来进行验证。
 	
-	For example, in a TSP algo, the path found by the miner would be sent to the
-	node to seed the verifiction logic prior to the node determining if the path
-	meets the Bounty / POW requirements.
+        例如，在TSP算法中，发现的路径数据的miner需要发数据给节点，并由节点根据设定的校验逻辑精准地校验是否符合悬赏/POW的要求。
 	
-	The use of submitted data is optional; however, it is usually required when
-	"verify" function does not contain the complete algorithm.
+        使用提交的数据是可选的，但是，当"verify"函数没有包含完整的算法时，它们通常还是需要用到的。
 	
-	Currently, all submitted data must be Unsigned Ints from the u[] array.
-	Job Authors will provide the number of values to submit and the starting u[]
-	index to extract the data from.
-
-	There are two declarations required to submit data to the node:
+        当前，所有提交的数据必须是无符号整数型的u[]数组，任务设计人员需要提交上传数据的值和数组u[]需要提取的起始索引。
+	
+	
+        向节点提交数据需要两个声明：
 		
 		submit_sz   XXXX  // Identifies # of Unsigned Ints to submit to the node
 		submit_idx  XXXX  // Identifies starting index in u[] array to extract submitted data from
 		
 		Note: submit_sz is currently limited to a max size of (TBD - Need To Determine)
-
-	The values submitted to the node will be used to update the corresponding
-	u[] values prior to executing the verify logic.
+        
+	在执行校验逻辑之前，提交到节点的数值将会更新到对应的u[]中。
 	
 
 迭代数据储存
