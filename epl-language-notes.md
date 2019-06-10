@@ -135,42 +135,39 @@ VM初始化变量
 
 函数
 ---------
+        
+        所有ePL语句（声明全局变量数组和存储除外）必须包含在函数中。
 
-	All ElasticPL statements (except declaring global variable arrays and storage)
-	must be contained within functions.
-	
-	No functions within ElasticPL are allowed to call the "main" function.
+        在ePL中不允许调用"main"函数
 
-	The "main" function is the only function within ElasticPL that is allowed to
-	call the "verify" function.
+        在ePL中只允许"main"函数调用"verify"函数
 
-	Recursive function calls are not allowed.
-	
-	Functions can only be nested 256 levels deep.
-	
-	Function names can be made up of numbers (0-9), letters (a-z), and
-	underscores (_).  However, names cannot begin with any reserved word
-	in the ElasticPL language.
-	
-	Functions are declared as follows:
+        不允许递归函数的调用
+
+        函数最大嵌套允许256层
+
+        函数的命名可以使用数字（0-9）,字母（a-z），或者下划线（—）.但是，命名禁止使用ePL的预留字。	
+
+        
+        函数声明如下：
 	
 		function name_of_function {
 			<statement1>;
 			<statement2>;
 			etc...
 		}
-		
-		Note: Statements must be enclosed in {} brackets.
+                
+	        注：语句必须使用{}括起来。
 	
-	To call a function, use the function name and parenthesis as follows:
+        要调用函数，请使用函数名和括号，如下所示：
 	
 		name_of_function();
 	
-	Functions can appear in any order within the program.
+        函数在程序中的顺序可以根据需要设定。
+	  
+        所有的ePL程序必须有一个"main"函数
 	
-	All ElasticPL programs must have a "main" function.
-	
-	All ElasticPL programs must have a "verify" function.
+        所有的ePL程序必须有一个"verify"函数
 
 
 "main"函数
