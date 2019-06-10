@@ -208,28 +208,20 @@ VM初始化变量
 
 	VERIFY_BTY 声明
 	----------------
-
-		All ElasticPL programs must have a 'verify_bty' statement that includes
-		an expression that can be evaluated to True or False.  The format of the 
-		'verify_bty' statment is as follows:
+        
+	        所有的ePL程序必须包含'verify_bty'的声明，可以为True或者False.'verify_bty'的声明格式如下：
 		
 			verify_bty( <Expression that evaluates to True or False> )
-	
-		This expression is used to indicate whether or not a given solution
-		satisfies the Bounty requirements.  For Example:
+	    
+	        这个表达式的作用是表明是否有满足悬赏要求的解决方案。例如：
 	
 			verify_bty (u[1000] == 0)
 	
-		The above statement indicates that a bounty will be rewarded for solutions
-		where there value stored in u[1000] equals zero.  Otherwise, the
-		solution does not qualify for a bounty.
+	        上面的声明表示当存储在u[1000]的数值等于0时，这个解决方案就可以拿到悬赏的奖励。反之，该解决方案不符合悬赏要求。
+		
+	        每个"verify"（或者"main"，如果使用到）函数只能包含一个'verify_bty'声明。
 	
-		Only one 'verify_bty' statement per "verify" (and "main" if applicable)
-		is allowed.
-		
-		The Job Author must ensure there is sufficient logic in the "verify"
-		function to validate that the submitted data is in fact a valid solution.
-		
+                任务设计人员必须要确保"verify"函数中有足够且正确的校验逻辑，来验证提交来的解决方案是有效的。
 		
 	VERIFY_POW 声明
 	----------------
