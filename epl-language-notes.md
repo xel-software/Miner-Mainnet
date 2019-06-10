@@ -226,31 +226,24 @@ VM初始化变量
 	VERIFY_POW 声明
 	----------------
 
-		All ElasticPL programs must have a 'verify_pow' statement that checks
-		if four Unsigned Ints determined by the Job Author produce an MD5 hash
-		less than the current POW target.    The format of the 'verify_pow' 
-		statment is as follows:
+                所有的ePL程序必须有一个'verify_pow'声明，用于检查任务设计人员产生的4个无符号整数型的MD5哈希值是否小于当前的POW目标值。
+	        'verify_pow'声明的格式如下：
 		
 			verify_pow( <UINT1>, <UINT2>, <UINT3>, <UINT4> )
 		
-		The Job Author should choose four Unsigned Int values that will likely
-		vary from miner to miner.  This help the author to ensure that miners
-		are actually running the full logic to determine Bounty solutions.
+	        任务设计人员需要选择4个无符号整数型数值，因Miner而异。
+		这有助于设计人员确保miners可以运行完整的校验逻辑来准确获取悬赏的解决方案。
 
-		For Example:
+		例如:
 	
 			verify_pow (u[25], u[1001], u[823], u[123])
 	
-		The above statement indicates that a pow reward will be granted for
-		solutions where the MD5 hash of u[25], u[1001], u[823], u[123] is less
-		than the current target value.
-	
-		Only one 'verify_pow' statement per "verify" (and "main" if applicable)
-		is allowed.
-		
-		The Job Author must ensure there is sufficient logic in the "verify"
-		function to validate that the submitted data is in fact a valid solution.
-	
+	        上面的声明表示如果 u[25], u[1001], u[823], u[123]中的MD5哈希值小于当前的目标数值，
+		那么解决方案将获得POW奖励。
+
+	        每个'verify'（或者'main'，如果使用到）函数只能包含一个'verify_pow''声明。
+
+		 任务设计人员必须要确保"verify"函数中有足够且正确的校验逻辑，来验证提交来的解决方案是有效的。
 	
 ePL声明
 --------------------
