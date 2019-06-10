@@ -90,13 +90,11 @@ VM初始化变量
 
 提交数据进行验证
 -----------------------------
-
-	Many smaller, less complex algorithms can be verified by running the full
-	logic using the randomized variables in the m[] array.  However, more
-	complex algorithms must provide simplified logic to perform the validation.
-	This simplified logic usually needs some of the variable arrays to be
-	pre-populated before running the verification.  These values will need to be
-	passed from the miner to the Elastic Node for verification.
+ 
+        许多小型的、简单的算法可以使用全随机的m[]数组中的变量进行全逻辑校验。
+	但是更加复杂的算法必须提供简化的逻辑来执行验证。
+        这种简化的逻辑通常需要在运行验证之前预填充一些变量数组。
+	这些数组又会由miner发送给XEL节点来进行验证。
 	
 	For example, in a TSP algo, the path found by the miner would be sent to the
 	node to seed the verifiction logic prior to the node determining if the path
