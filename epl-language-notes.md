@@ -285,9 +285,8 @@ ePL概述
 	
 ePL运算符
 -------------------
-
-	The following operators are supported by ElasticPL.  These operators behave
-	the same as C operators based on the C99 standard:
+ 
+        以下操作符ePL都支持。它们的功能和用法同基于C99标准的C的功能和用法一样。
 	
 	Precedence  Operator  Description            Order
 	------------------------------------------------------------
