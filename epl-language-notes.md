@@ -172,27 +172,23 @@ VM初始化变量
 
 "main"函数
 ---------------
-
-	All programs must have a "main" function.
-
-	This function should include the full algorithm that the Job Author wants
-	solved.
-
-	The "main" function can call any other function in the ElasticPL program
-	including the "verify" function.
+      
+        所有的程序必须有一个"main"函数
 	
-	The "main" function is called by the mining software to search for Bounty
-	and POW solutions that meet the criteria established by the Job Author.
+        任务设计人员想要解决的算法编程，需要全部在主函数中
 	
-	Ultimately, the "main" function needs to determine if a Bounty and/or POW
-	solution was found.  There are 2 ways to make this determination:
+        在ePL程序中，"main"函数可以调用任何其他函数，包括"verify"函数
 	
-		Option 1:
+        mining软件通过调用"main"函数来查找任务设计人员建立标准的悬赏和POW的解决方案
+	
+        最后，"main"函数需要确定是否找到了悬赏 和/或 POW的解决方案。这里有两个方式可以确定：
+	
+	        选项1:
 		
 			The "main" function can call the "verify" function which will contain
 			specific logic to check if Bounty / POW solution are valid.
 		
-		Option 2:
+	        选项2:
 		
 			The "main" function can include all the logic to check for valid
 			Bounty / POW solutions by using the verify_bty and verify_pow
@@ -201,8 +197,7 @@ VM初始化变量
 			See the "verify" Function details for additional details on how these
 			two statement work.
 		
-		Note: The "main" function can only use Option 1 or Option 2, not both.		
-
+	        注："main"函数只能使用用选项1或者选项2，不能两个同时使用。	
 		
 "verify" 函数
 -----------------
