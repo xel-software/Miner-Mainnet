@@ -111,34 +111,27 @@ VM初始化变量
 	在执行校验逻辑之前，提交到节点的数值将会更新到对应的u[]中。
 	
 
-迭代数据储存
+迭代数据存储
 ----------------------
+  	
+        ePL能够存储有限的数据，用于初始化算法的后续迭代。这允许任务设计人员从同一个工作包迭代前，
+	去创建算法并建立公认的任务悬赏。
 
-	ElasticPL has the ability to store a limited amount of data to be used to
-	intialize subsequent iterations of the algorithm.  This allows job authors
-	to create algorithms that build off the accepted Bounty Solutions from prior
-	iterations in the same work package.
-	
-	The use of iterations and stored data is optional.
-	
-	Currently, the data to be stored is the same as the data submitted for
-	verification of a Bounty solution (See the SUBMIT DATA FOR VALIDATION
-	section for details on how to submit verification data).
+        迭代和数据存储的使用是可选的。
+	 
+        当前，要存储的数据与提交用于验证奖励解决方案的数据相同（可查看 提交数据进行校验 章节的有关如何提交验证数据部分）
 
-	The data will only be stored for accepted Bounty solutions.
+        只存储已接受悬赏方案的数据。
 
-	If the ElasticPL job uses iterations:
+        如果ePL任务使用迭代:
 
-		Stored data is available to the ElasticPL job by accessing the s[] array.
-		
-		For Iteration 0, the s[] array will be initializized to zeros.
+                通过访问s[]数组，存储的数据可用于ePL任务。
 
-		For all	other iterations, s[0] - s[storage_sz - 1] will be prefilled with
-		the stored Unsigned	Int values for Boutny solutions for the prior iteration.
+                在迭代数为0时，数组s[]会被初始化为0.
 
+                在之后其他迭代，每一次迭代前，悬赏解决方案的数据会被预填充到数据类型为无符号整数型的 s[0] - s[storage_sz - 1]中。
 
-	If the ElasticPL job does not use iterations, the s[] array should not be used.
-	
+        如果ePL任务没有使用迭代，数组s[]将不会被用到。	
 
 函数
 ---------
