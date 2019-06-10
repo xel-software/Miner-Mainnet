@@ -185,17 +185,15 @@ VM初始化变量
 	
 	        选项1:
 		
-			The "main" function can call the "verify" function which will contain
-			specific logic to check if Bounty / POW solution are valid.
+		        在"main"函数中调用"verify"函数，其中"verify"应包含
+			有效的、明确的悬赏/POW的解决方案的校验逻辑。
 		
 	        选项2:
 		
-			The "main" function can include all the logic to check for valid
-			Bounty / POW solutions by using the verify_bty and verify_pow
-			statements.
+		        在"main"函数中包含有效的悬赏/POW的解决方案的校验逻辑，需要使用veriry_bty和verify_pow的声明。
 			
-			See the "verify" Function details for additional details on how these
-			two statement work.
+	                可以在"verify"函数篇章了解以上两个声明是如何工作的更多细节
+		
 		
 	        注："main"函数只能使用用选项1或者选项2，不能两个同时使用。	
 		
