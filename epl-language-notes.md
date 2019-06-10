@@ -333,9 +333,8 @@ ePL运算符
 		
 ePL内置函数
 ----------------------------
-
-	ElasticPL includes several functions from the C math library.  These built-in
-	functions behave the same as in C.
+        
+        ePL语言内置了几个C语言math库的函数。这些函数的功能和用于与C语言中一样。
 	
 		sinh( double d )             Computes hyperbolic sine
 		sin( double d )              Computes sine
@@ -358,8 +357,7 @@ ePL内置函数
 		abs( int i )                 Computes absolute value of an integral value
 		fmod ( double x, double y )  Computes remainder of the floating-point division operation
 	
-	ElasticPL has one custom built-in function below.  More functions will be
-	added later.
+        ePL语言拥有一个自定义的内置函数。更多的函数后面会再添加。
 	
 		gcd ( uint x, uint y)        Computes greatest common denominator
 
