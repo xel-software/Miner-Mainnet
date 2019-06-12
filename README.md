@@ -93,9 +93,13 @@ use `./xel_miner -h` to see a full list of options.
 ## 帮助改进
 
 -我们喜欢更多的推送/ pull requests
+
 -我们也喜欢更多的问题/issues(提出必解决;-) )
+
 -无论如何，都欢迎您提出任何的想法/ideas
+
 -欢迎解决和跟进其他人提出的问题/issuse
+
 -欢迎查看现有的代码和推送/pull requeset
 
 ----
