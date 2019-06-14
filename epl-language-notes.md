@@ -1,41 +1,33 @@
-OVERVIEW
+概述
 -----------
 
-	The ElasticPL programming language allows Elastic job authors to express
-	complex algorithms to be solved for bounties.
+	 ePL(ElasticPL) 编程语言允许任务分发人员将复杂的算法表达为可悬赏解决的方式。
+	 它参照并吸收了很多C语言的基础运算符/函数。
+ 
+	 为了确保任务不会出现无限循环，ePL语言没有 FOR, WHILE和 DO循环。
+	 作为替代，任务分发人员可以使用ePL的REPEAT函数。
+ 
+	 任务分发人员需要定义特定的验证逻辑，使其低于最大执行时间（WCET）内，
+ 	 以确保Miner提交的悬赏和POW的解决方案可以被分布式网络内的所有节点所验证。
 	
-	The language is loosely based on the C programming language incorporating
-	many of the basic operators / functions.
-	
-	There are no FOR, WHILE, or DO loops in ElasticPL in order to ensure that
-	programs will not run indefinitely.  Instead, job authors will use the 
-	ElasticPL REPEAT function.
-	
-	Job authors will be responsible for defining specific verification logic
-	that is below a certain WCET to ensure the Bounty and POW solutions
-	submitted by miners can be validated by all nodes on a distributed network.
-
-	
-PROGRAM LAYOUT
+程序设计规范
 --------------
 
-	An ElasticPL program consists of:
-		- 1 or more Global Variable arrays
-		- Storage declarations (Optional)
-		- "main" Function
-		- "verify" Function
-		- User-Defined Functions (Optional)
+	一个ePL程序应包含:
+		 - 一个或者多个全局数组变量
+		 - 存储声明（可选） 
+	         - "main"函数
+	         - "verify"函数
+	         -用户自定义函数（可选）
 
 		
-GLOBAL VARIABLES
+全局变量
 ----------------
+         
+        ePL虚拟机所有存储都需要使用全局变量，且都是标准的32位和64位数据类型（int32_t, uint32_t, 
+		int64_t, uint64_t,float, double）。不支持本地存储。
 
-	The ElasticPL VM performs all storage using Global Variables based on the
-	standard 32bit and 64bit data types (int32_t, uint32_t, int64_t, uint64_t,
-	float, double). Local storage is not supported.
-	
-	Named variables are not allowed, instead data is stored in an array which
-	represents the data type.  The arrays are declared as follows:
+        不允许使用自定义变量，数据的存储需要使用一个符合要求数据类型的数组内。数据的声明如下：
 	
 		array_int    XXXX
 		array_uint   XXXX
@@ -44,53 +36,45 @@ GLOBAL VARIABLES
 		array_float  XXXX
 		array_double XXXX
 	
-		Note 1: XXXX represents the number of elements in the array.
-		Note 2: Only 1 instance of each data type can be declared.
-		Note 3: The maximim combined storage size of all Global Variables can
-		        not exceed (TBD - need to determine max memory)
-
-	All global arrays need to be declared as the first lines in the program,
-	prior to any functions.
-
-	Array variables are accessed using the prefix i, u, l, ul, f, or d followed
-	by square brackets that include the zero based array index.  For example:
+		Note 1: XXXX 表示数组中的元素数.
+		Note 2: 数组内元素使用统一的数据类型.
+		Note 3: 所有全局变量的最大组合存储大小不超过（待定 - 需要确定最大的内存空间）
+        
+        全局变量的声明都应该在程序的第一行，所有函数之前。
+	
+        数组的前缀可以使用i, u, l, ul, f, 或者 d，方括号内为基于0的数组索引。例如：
 	
 		i[0] = 100;
 		u[5] = u[3] * 10;
 		d[6] = u[5] / i[5];
-	
-	Although it is discouraged to mix data types, there are times when this may
-	be necessary.  Because ElasticPL does not have an explicit 'cast' operation,
-	when an array variable is combined with a variable or constant of a different
-	data type, the values being combined will be cast based on the following
-	precedence:
-	
+
+        虽然不鼓励使用混合的数据类型，但有时候还是会不可避免地会使用到。
+        由于ePL没有强制转换的操作，当遇到数组变量与常规变量或常量组合，且都是不同的数据类型时，
+        需遵循以下转换优先级：
+
 		int32_t -> uint32_t -> int64_t -> uint64_t -> float -> double
 		
-		For example, using d[6] = u[5] / i[5];
+	        例如：   d[6] = u[5] / i[5];
 		
-			u[5] / i[5] evaluates to u[5] / (uint)(i[5]) 
+			u[5] / i[5] 分析为 u[5] / (uint)(i[5]) 
 			
-			no cast is needed for (u[5] / (uint)(i[5])) as the d[6] storage
-			can handle the result of the operation.
-
-	If a value assigned to an array variable has a different data type, the
-	value will be cast to the same type as the array variable.
+			但没有必要写成(u[5] / (uint)(i[5])) 因为 d[6] 的存储类型
+			已经决定了操作的结果。	
+			
+        如果一个数值分配给一个数组变量，当它们时两个不同的数据类型时，该数值会被转换为与数组变量同样的数据类型。
 	
-	Variables that have a calculated index value can accept an Unsigned Int /
-	Long as thier index; however, a boundary check will need to be performed
-	which may impact performance.  Therefore, you may want to minimize the use
-	of these.  For example:
+	 	拥有动态计算索引值的变量可接受无符号整数型（ Unsigned Int）/长整数型（Long）作为索引值；
+		但是，需要执行边界检查，这可能会影响到性能。因此，请尽可能少的使用它们。例如：        
 	
-		u[0] = u[u[3]]; evaluates to: u[0] = ((u[3]<MAX_ALLOWED) ? u[u[3]] : 0)
-		u[u[3]] = u[0]; evaluates to: if (u[3]<MAX_ALLOWED) { u[u[3]] = u[0]; }
+		u[0] = u[u[3]]; 等价于: u[0] = ((u[3]<MAX_ALLOWED) ? u[u[3]] : 0)
+		u[u[3]] = u[0]; 等价于: if (u[3]<MAX_ALLOWED) { u[u[3]] = u[0]; }
 
 		
-VM INITIALIZED VARIABLES
+VM初始化变量
 ------------------------
-
-	The ElasticPL VM inializes 12 Unsigned Int variables each run/iteration.
-	These variables are stored in m[0] through m[11] and defined as follows:
+        
+        ePL虚拟机在每次的运行/迭代都会更新12个无符号整数型变量。
+        这些变量存储在m[0]到m[11]中，定义如下：
 	
 		m[0]	Random 32 bit Unsigned Int
 		.
@@ -99,231 +83,183 @@ VM INITIALIZED VARIABLES
 		m[9]	Random 32 bit Unsigned Int
 		m[10]	Run Number
 		m[11]	Iteration Number
-
-	The variables allow the job authors to randomize their algorithm inputs
-	as well as trigger functions to run at specific intervals (i.e. run an 
-	'init' function only on run/iteration 0)
+		
+        这些变量允许任务分发人员随机化它们的算法输入以及触发特定时间间隔的函数。（例如当运行/迭代为0的时候运行init函数）
 	
 
-SUBMIT DATA FOR VALIDATION
+提交数据进行验证
 -----------------------------
-
-	Many smaller, less complex algorithms can be verified by running the full
-	logic using the randomized variables in the m[] array.  However, more
-	complex algorithms must provide simplified logic to perform the validation.
-	This simplified logic usually needs some of the variable arrays to be
-	pre-populated before running the verification.  These values will need to be
-	passed from the miner to the Elastic Node for verification.
+ 
+        许多小型的、简单的算法可以使用全随机的m[]数组中的变量进行全逻辑校验。但是更加复杂的算法必须提供简化的逻辑来执行验证。
+        这种简化的逻辑通常需要在运行验证之前预填充一些变量数组。这些数组又会由miner发送给XEL节点来进行验证。
 	
-	For example, in a TSP algo, the path found by the miner would be sent to the
-	node to seed the verifiction logic prior to the node determining if the path
-	meets the Bounty / POW requirements.
+        例如，在TSP算法中，发现的路径数据的miner需要发数据给节点，并由节点根据设定的校验逻辑精准地校验是否符合悬赏/POW的要求。
 	
-	The use of submitted data is optional; however, it is usually required when
-	"verify" function does not contain the complete algorithm.
+        使用提交的数据是可选的，但是，当"verify"函数没有包含完整的算法时，它们通常还是需要用到的。
 	
-	Currently, all submitted data must be Unsigned Ints from the u[] array.
-	Job Authors will provide the number of values to submit and the starting u[]
-	index to extract the data from.
-
-	There are two declarations required to submit data to the node:
+        当前，所有提交的数据必须是无符号整数型的u[]数组，任务分发人员需要提交上传数据的值和数组u[]需要提取的起始索引。
+	
+	
+        向节点提交数据需要两个声明：
 		
 		submit_sz   XXXX  // Identifies # of Unsigned Ints to submit to the node
 		submit_idx  XXXX  // Identifies starting index in u[] array to extract submitted data from
 		
 		Note: submit_sz is currently limited to a max size of (TBD - Need To Determine)
-
-	The values submitted to the node will be used to update the corresponding
-	u[] values prior to executing the verify logic.
+        
+		在执行校验逻辑之前，提交到节点的数值将会更新到对应的u[]中。
 	
 
-ITERATION DATA STORAGE
+迭代数据存储
 ----------------------
+  	
+        ePL能够存储有限的数据，用于初始化算法的后续迭代。这允许任务分发人员从同一个工作包迭代前，去创建算法并建立公认的任务悬赏。
 
-	ElasticPL has the ability to store a limited amount of data to be used to
-	intialize subsequent iterations of the algorithm.  This allows job authors
-	to create algorithms that build off the accepted Bounty Solutions from prior
-	iterations in the same work package.
-	
-	The use of iterations and stored data is optional.
-	
-	Currently, the data to be stored is the same as the data submitted for
-	verification of a Bounty solution (See the SUBMIT DATA FOR VALIDATION
-	section for details on how to submit verification data).
+        迭代和数据存储的使用是可选的。
+	 
+        当前，要存储的数据与提交用于验证奖励解决方案的数据相同（可查看 提交数据进行校验 章节的有关如何提交验证数据部分）
 
-	The data will only be stored for accepted Bounty solutions.
+        只存储已接受悬赏方案的数据。
 
-	If the ElasticPL job uses iterations:
+        如果ePL任务使用迭代:
 
-		Stored data is available to the ElasticPL job by accessing the s[] array.
-		
-		For Iteration 0, the s[] array will be initializized to zeros.
+                通过访问s[]数组，存储的数据可用于ePL任务。
 
-		For all	other iterations, s[0] - s[storage_sz - 1] will be prefilled with
-		the stored Unsigned	Int values for Boutny solutions for the prior iteration.
+                在迭代数为0时，数组s[]会被初始化为0.
 
+                在之后其他迭代，每一次迭代前，悬赏解决方案的数据会被预填充到数据类型为无符号整数型的 s[0] - s[storage_sz - 1]中。
 
-	If the ElasticPL job does not use iterations, the s[] array should not be used.
-	
+        如果ePL任务没有使用迭代，数组s[]将不会被用到。	
 
-FUNCTIONS
+函数
 ---------
+        
+        所有ePL语句（声明全局变量数组和存储除外）必须包含在函数中。
 
-	All ElasticPL statements (except declaring global variable arrays and storage)
-	must be contained within functions.
-	
-	No functions within ElasticPL are allowed to call the "main" function.
+        在ePL中不允许调用"main"函数
 
-	The "main" function is the only function within ElasticPL that is allowed to
-	call the "verify" function.
+        在ePL中只允许"main"函数调用"verify"函数
 
-	Recursive function calls are not allowed.
-	
-	Functions can only be nested 256 levels deep.
-	
-	Function names can be made up of numbers (0-9), letters (a-z), and
-	underscores (_).  However, names cannot begin with any reserved word
-	in the ElasticPL language.
-	
-	Functions are declared as follows:
+        不允许递归函数的调用
+
+        函数最大嵌套允许256层
+
+        函数的命名可以使用数字（0-9）,字母（a-z），或者下划线（—）.但是，命名禁止使用ePL的预留字。	
+
+        
+        函数声明如下：
 	
 		function name_of_function {
 			<statement1>;
 			<statement2>;
 			etc...
 		}
-		
-		Note: Statements must be enclosed in {} brackets.
+                
+	        注：语句必须使用{}括起来。
 	
-	To call a function, use the function name and parenthesis as follows:
+        要调用函数，请使用函数名和括号，如下所示：
 	
 		name_of_function();
 	
-	Functions can appear in any order within the program.
+        函数在程序中的顺序可以根据需要设定。
+	  
+        所有的ePL程序必须有一个"main"函数
 	
-	All ElasticPL programs must have a "main" function.
-	
-	All ElasticPL programs must have a "verify" function.
+        所有的ePL程序必须有一个"verify"函数
 
 
-"main" Function
+"main"函数
 ---------------
-
-	All programs must have a "main" function.
-
-	This function should include the full algorithm that the Job Author wants
-	solved.
-
-	The "main" function can call any other function in the ElasticPL program
-	including the "verify" function.
+      
+        所有的程序必须有一个"main"函数
 	
-	The "main" function is called by the mining software to search for Bounty
-	and POW solutions that meet the criteria established by the Job Author.
+        任务分发人员想要解决的算法编程，需要全部在主函数中
 	
-	Ultimately, the "main" function needs to determine if a Bounty and/or POW
-	solution was found.  There are 2 ways to make this determination:
+        在ePL程序中，"main"函数可以调用任何其他函数，包括"verify"函数
 	
-		Option 1:
+        mining软件通过调用"main"函数来查找任务设计人员建立标准的悬赏和POW的解决方案
+	
+        最后，"main"函数需要确定是否找到了悬赏 和/或 POW的解决方案。这里有两个方式可以确定：
+	
+	        选项1:
 		
-			The "main" function can call the "verify" function which will contain
-			specific logic to check if Bounty / POW solution are valid.
+		        在"main"函数中调用"verify"函数，其中"verify"应包含
+			有效的、明确的悬赏/POW的解决方案的校验逻辑。
 		
-		Option 2:
+	        选项2:
 		
-			The "main" function can include all the logic to check for valid
-			Bounty / POW solutions by using the verify_bty and verify_pow
-			statements.
+		        在"main"函数中包含有效的悬赏/POW的解决方案的校验逻辑，需要使用veriry_bty和verify_pow的声明。
 			
-			See the "verify" Function details for additional details on how these
-			two statement work.
+	                可以在"verify"函数篇章了解以上两个声明是如何工作的更多细节
 		
-		Note: The "main" function can only use Option 1 or Option 2, not both.		
-
 		
-"verify" Function
+	        注："main"函数只能使用用选项1或者选项2，不能两个同时使用。	
+		
+"verify" 函数
 -----------------
-
-	All programs must have a "verify" function.
-
-	This function should include the the minimal amount of logic required to
-	ensure that the submitted solution meets the Bounty and/or POW requirements.
+   
+        所有的程序必须有一个"verify"函数。
 	
-	The logic included in the "verify" function must be less than WCET = TBD
+        校验函数应该包含小体积精简的校验逻辑要求，来确保提交来的解决方案符合悬赏 与/或 POW的要求。
+	
+        这个校验函数中的逻辑设计，运行时间不能超过WCET（待定）
 
-	VERIFY_BTY Statement
+	VERIFY_BTY 表达式
 	----------------
-
-		All ElasticPL programs must have a 'verify_bty' statement that includes
-		an expression that can be evaluated to True or False.  The format of the 
-		'verify_bty' statment is as follows:
+        
+	        所有的ePL程序必须包含'verify_bty'的声明，可以为True或者False.'verify_bty'的表达式格式如下：
 		
 			verify_bty( <Expression that evaluates to True or False> )
-	
-		This expression is used to indicate whether or not a given solution
-		satisfies the Bounty requirements.  For Example:
+	    
+	        这个表达式的作用是表明是否有满足悬赏要求的解决方案。例如：
 	
 			verify_bty (u[1000] == 0)
 	
-		The above statement indicates that a bounty will be rewarded for solutions
-		where there value stored in u[1000] equals zero.  Otherwise, the
-		solution does not qualify for a bounty.
+	        上面的声明表示当存储在u[1000]的数值等于0时，这个解决方案就可以拿到悬赏的奖励。反之，该解决方案不符合悬赏要求。
+		
+	        每个"verify"（或者"main"，如果使用到）函数只能包含一个'verify_bty'表达式。
 	
-		Only one 'verify_bty' statement per "verify" (and "main" if applicable)
-		is allowed.
+                任务分发人员必须要确保"verify"函数中有足够且正确的校验逻辑，来验证提交来的解决方案是有效的。
 		
-		The Job Author must ensure there is sufficient logic in the "verify"
-		function to validate that the submitted data is in fact a valid solution.
-		
-		
-	VERIFY_POW Statement
+	VERIFY_POW 表达式
 	----------------
 
-		All ElasticPL programs must have a 'verify_pow' statement that checks
-		if four Unsigned Ints determined by the Job Author produce an MD5 hash
-		less than the current POW target.    The format of the 'verify_pow' 
-		statment is as follows:
+                所有的ePL程序必须有一个'verify_pow'表达式，用于检查任务分发人员产生的4个无符号整数型的MD5哈希值是否小于当前的POW目标值。
+	        'verify_pow'表达式的格式如下：
 		
 			verify_pow( <UINT1>, <UINT2>, <UINT3>, <UINT4> )
 		
-		The Job Author should choose four Unsigned Int values that will likely
-		vary from miner to miner.  This help the author to ensure that miners
-		are actually running the full logic to determine Bounty solutions.
+	        任务分发人员需要选择4个无符号整数型数值，因Miner而异。
+		这有助于任务分发人员确保miners可以运行完整的校验逻辑来准确获取悬赏的解决方案。
 
-		For Example:
+		例如:
 	
 			verify_pow (u[25], u[1001], u[823], u[123])
 	
-		The above statement indicates that a pow reward will be granted for
-		solutions where the MD5 hash of u[25], u[1001], u[823], u[123] is less
-		than the current target value.
+	        上面的表达式表示如果 u[25], u[1001], u[823], u[123]中的MD5哈希值小于当前的目标数值，
+		那么解决方案将获得POW奖励。
+
+	        每个'verify'（或者'main'，如果使用到）函数只能包含一个'verify_pow'表达式。
+
+		任务分发人员必须要确保"verify"函数中有足够且正确的校验逻辑，来验证提交来的解决方案是有效的。
 	
-		Only one 'verify_pow' statement per "verify" (and "main" if applicable)
-		is allowed.
-		
-		The Job Author must ensure there is sufficient logic in the "verify"
-		function to validate that the submitted data is in fact a valid solution.
-	
-	
-ELASTICPL STATEMENTS
+ePL概述
 --------------------
+      
+        如同C语言，所有的ePL声明都需要在结尾加一个';'
 	
-	Similar to C, all ElasticPL statements are terminated by a ';'
-	
-	IF / ELSE Statements
+	IF / ELSE 语句
 	--------------------
 	
-		ElasticPL supports IF / ELSE statements.  Their behavior is identical
-		to the C programming language.
-
+	        ePL支持IF / ELSE语句，功能和用法与C语言一样。
 		
-	REPEAT Statement
+	REPEAT 语句
 	----------------
+	        
+	        ePL不支持DO，WHILE,还有FOR循环语句。
+		作为替代，ePL使用的是'repeat'语句，来确保所有的循环能运行到结束，但又不能无限期的循环下去。
 	
-		ElasticPL does not allow DO, WHILE, or FOR loops.  Instead, ElasticPL
-		uses a 'repeat' statement which ensures all loops terminate and cannot
-		run indefinitely.
-		
-		The format of the 'repeat' statment is as follows:
+	        'repeat'语句的格式如下：
 		
 			repeat( <variable1>, <variable2>, <constant> ) { }
 
@@ -335,21 +271,20 @@ ELASTICPL STATEMENTS
 				.			
 			}
 		
-		variable1 = Unsigned Int variable to store the loop counter
-		            (Array variable must have a constant index)
-		variable2 = Unsigned Int variable or constant to store number of iterations to do
-		            (Array variable can be a variable or constant index)
-		constant  = Unsigned Int constant for Max number of iterations allowed
-		            (constant is used to calculate the WCET of the Repeat)
+		variable1 = 无符号整数型变量用于存储循环次数
+		            (数组变量必须具有常量索引)
+		variable2 = 无符号整数型变量用于存储需要执行的迭代次数
+		            (数组变量必须具有常量索引)
+		constant  = 无符号整数型变量用于存储允许迭代次数的最大值
+		            (常量用于计算'repeat'的WCET次数)
 		
-		Note:  'repeat' statements can only be nested up to 32 Levels.
+	        注：'repeat'语句最多只能嵌套32层
 			
 	
-ELASTICPL OPERATORS
+ePL运算符
 -------------------
-
-	The following operators are supported by ElasticPL.  These operators behave
-	the same as C operators based on the C99 standard:
+ 
+        以下操作符ePL都支持。它们的功能和用法同基于C99标准的C的功能和用法一样。
 	
 	Precedence  Operator  Description            Order
 	------------------------------------------------------------
@@ -394,11 +329,10 @@ ELASTICPL OPERATORS
 	    13        |=      Bit OR and Assignment  (Right to Left)
 
 		
-ELASTICPL BUILT_IN FUNCTIONS
+ePL内置函数
 ----------------------------
-
-	ElasticPL includes several functions from the C math library.  These built-in
-	functions behave the same as in C.
+        
+        ePL语言内置了几个C语言math库的函数。这些函数的功能和用于与C语言中一样。
 	
 		sinh( double d )             Computes hyperbolic sine
 		sin( double d )              Computes sine
@@ -421,8 +355,7 @@ ELASTICPL BUILT_IN FUNCTIONS
 		abs( int i )                 Computes absolute value of an integral value
 		fmod ( double x, double y )  Computes remainder of the floating-point division operation
 	
-	ElasticPL has one custom built-in function below.  More functions will be
-	added later.
+        ePL语言拥有一个自定义的内置函数。更多的函数后面会再添加。
 	
 		gcd ( uint x, uint y)        Computes greatest common denominator
 
